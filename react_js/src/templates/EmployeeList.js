@@ -11,8 +11,12 @@ export default function EmployeeList(props) {
         try {
 
             const { data } = await axios.post("/api/admin/delete", { _id })
-            if (data)
-                props.getEmployeeList()
+            console.log(data)
+            if (data) {
+                let newEmployeeData = props.employeeData.filter((x) => !x._id.includes(_id))
+                setEmployeeData(newEmployeeData)
+            }
+
 
         } catch (err) {
             console.log(err)

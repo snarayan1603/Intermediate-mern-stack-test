@@ -37,7 +37,9 @@ router.post('/save', upload.single('photo'), async (req, res) => {
     console.log(req.file)
 
     let body = req.body;
-    body.photo = req.file.path
+    if (req.file)
+        body.photo = req.file.path
+
     let date = new Date();
 
     body.createDate = date.toGMTString().substring(5, 16)
@@ -94,14 +96,14 @@ router.post("/update", upload.single('photo'), async (req, res) => {
     const findEmployee = await client.db("Intermediate_Mern_Stack_test").collection("employee").find({ email: body.email }).toArray()
 
     for (let i = 0; i < findEmployee.length; i++) {
-        console.log(findEmployee[i]._id, body._id)
-        if (findEmployee[i].email === body.email && findEmployee[i]._id !== body._id) {
+        console.log(findEmployee[i]._id.toString(), body._id)
+        if (findEmployee[i].email === body.email && findEmployee[i]._id.toString() !== body._id) {
             res.status(409).send({ error: "Another employee with email already exist" })
             return
         }
     }
 
-    const updateEmployee = await client.db("Intermediate_Mern_Stack_test").collection("users").updateOne({ _id: body._id }, { $set: { email: body.email, phone: body.phone } })
+    const updateEmployee = await client.db("Intermediate_Mern_Stack_test").collection("employee").findOneAndUpdate({ _id: ObjectId(body._id) }, { $set: { email: body.email, phone: body.phone } })
     console.log(updateEmployee)
     if (updateEmployee)
         res.send({ message: "Updated successfully" })

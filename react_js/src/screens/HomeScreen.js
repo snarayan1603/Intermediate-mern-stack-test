@@ -17,6 +17,7 @@ export default function HomeScreen() {
 
     const [employeeData, setEmployeeData] = React.useState([])
     const [employeeError, setEmployeeError] = React.useState("")
+    const [refresh, setRefresh] = React.useState(true)
 
     React.useEffect(() => {
         getEmployeeList()
@@ -27,7 +28,9 @@ export default function HomeScreen() {
         try {
 
             const { data } = await axios.post("/api/admin/get")
+            console.log(data)
             setEmployeeData(data.employeeData)
+            setRefresh(!refresh)
 
         } catch (err) {
             console.log(err)

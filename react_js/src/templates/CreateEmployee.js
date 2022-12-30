@@ -17,6 +17,7 @@ export default function CreateEmployee(props) {
 
     async function submitHandler(e) {
         e.preventDefault()
+        setEmployeeData({ ...employeeData, message: "", error: "" })
 
         try {
 
@@ -34,12 +35,13 @@ export default function CreateEmployee(props) {
             console.log(data)
             if (data) {
                 props.getEmployeeList()
+                setEmployeeData({ ...employeeData, message: data.message, error: "" })
             }
 
 
         } catch (err) {
             console.log(err)
-            setEmployeeData({ ...employeeData, error: err.response.data.error ? err.response.data.error : err.message })
+            setEmployeeData({ ...employeeData, message: "", error: err.response.data.error ? err.response.data.error : err.message })
         }
     }
 
@@ -70,6 +72,7 @@ export default function CreateEmployee(props) {
             <div className='Model'>
 
                 {employeeData.error && <div style={{ padding: "10px", textAlign: "center", color: "red", backgroundColor: "#ffdadb" }}>{employeeData.error}</div>}
+                {employeeData.message && <div style={{ padding: "10px", textAlign: "center", color: "green", backgroundColor: "rgb(204, 253, 204)" }}>{employeeData.message}</div>}
                 <form className='form2' onSubmit={submitHandler} encType='multipart/form-data'>
 
                     <label>Name</label>
